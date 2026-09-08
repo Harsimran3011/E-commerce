@@ -28,7 +28,7 @@ const NotFound = () => {
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="mt-8 flex h-12 items-center justify-center gap-3 bg-black px-8 text-[10px] font-medium tracking-[1.5px] text-white transition hover:bg-gray-800"
+            className="mt-8 flex cursor-pointer h-12 items-center justify-center gap-3 bg-black px-8 text-[10px] font-medium tracking-[1.5px] text-white transition hover:bg-gray-800"
           >
             <ArrowLeft size={14} strokeWidth={1.5} />
             BACK TO HOME

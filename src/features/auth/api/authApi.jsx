@@ -1,26 +1,2 @@
-import { api } from "../../../config/api";
 
-export const loginUserApi = async (credentails) => {
-  try {
-    const res = await api.post("/auth/login", credentails);
-    localStorage.setItem("accessToken", res.data.accessToken);
-    return res.data;
-  } catch (error) {
-    console.log("Login error:", error);
-  }
-};
 
-export const HydrateUserApi = async () => {
-  let token = localStorage.getItem("accessToken");
-
-  try {
-    let res = await api.get("/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`, // Pass JWT via Authorization header
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.log("Login api error: ", error);
-  }
-};

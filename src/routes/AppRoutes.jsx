@@ -2,14 +2,13 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { lazy, Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { HydrateUserApi } from "../features/auth/api/authApi";
-import { setLoading, setLoggedInUser } from "../features/auth/state/authSlice";
 import { setProducts } from "../features/Collection/state/productSlice";
 import LoadingPage from "../shared/ui/pages/LoadingPage";
 import MainProtected from "./protected/MainProtected";
 import PublicProtected from "./protected/PublicProtected";
 import { productApi } from "../features/Collection/api/productApi";
 import NotFound from "../shared/ui/pages/NotFound";
+import { hydrateUserAction } from "../features/auth/state/authAction";
 
 const HomePage = lazy(() => import("../shared/ui/pages/HomePage"));
 const Blog = lazy(() => import("../shared/ui/pages/Blog"));
@@ -36,14 +35,9 @@ const AppRoutes = () => {
   useEffect(() => {
     (async () => {
       try {
-        const user = await HydrateUserApi();
-        if (user) {
-          dispatch(setLoggedInUser(user));
-        }
+        dispatch(hydrateUserAction());
       } catch (error) {
-        console.error("Hydration error:", error);
-      } finally {
-        dispatch(setLoading(false));
+        console.error("Hydration error: ", error);
       }
     })();
   }, [dispatch]);
