@@ -1,12 +1,11 @@
 import { ArrowLeft, Heart, Minus, Plus, ShoppingBag, Star } from "lucide-react";
-
-import { useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useDetailedProduct } from "../../hooks/productHook";
 
 const ProductDetails = () => {
-  const { id } = useParams();
-  const { products } = useSelector((store) => store.product);
-  const product = products[0].find((val) => val.id === Number(id));
+  const { data } = useDetailedProduct();
+
+  const product = data;
+  console.log("product ===> ", product);
 
   if (!product) {
     return (

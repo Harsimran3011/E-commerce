@@ -2,11 +2,9 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { lazy, Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { setProducts } from "../features/Collection/state/productSlice";
 import LoadingPage from "../shared/ui/pages/LoadingPage";
 import MainProtected from "./protected/MainProtected";
 import PublicProtected from "./protected/PublicProtected";
-import { productApi } from "../features/Collection/api/productApi";
 import NotFound from "../shared/ui/pages/NotFound";
 import { hydrateUserAction } from "../features/auth/state/authAction";
 
@@ -40,16 +38,6 @@ const AppRoutes = () => {
         console.error("Hydration error: ", error);
       }
     })();
-  }, [dispatch]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const data = await productApi();
-
-      dispatch(setProducts(data));
-    };
-
-    fetchProducts();
   }, [dispatch]);
 
   const router = createBrowserRouter([

@@ -5,18 +5,11 @@ export const loginUserAction = createAsyncThunk(
   "auth/login",
   async (credentials, thunkApi) => {
     try {
-      console.log("thunk triggered...");
       const res = await api.post("/auth/login", credentials);
-      console.log(res);
       localStorage.setItem("accessToken", res.data.accessToken);
       return res.data;
     } catch (error) {
-      console.log("FULL ERROR:", error);
-      console.log("MESSAGE:", error.message);
-      console.log("CODE:", error.code);
-      console.log("RESPONSE:", error.response);
-      console.log("REQUEST:", error.request);
-
+      console.log("LOGIN API ERROR:", error);
       return thunkApi.rejectWithValue(error.message || "Login Failed!");
     }
   },

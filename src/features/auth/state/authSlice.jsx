@@ -37,14 +37,14 @@ const authSlice = createSlice({
         state.isloading = false;
       })
       .addCase(hydrateUserAction.pending, (state) => {
-        state.isloading = false;
+        state.isloading = true;
       })
       .addCase(hydrateUserAction.fulfilled, (state, action) => {
         state.loggedInUser = action.payload;
-        state.isloading = true;
+        state.isloading = false;
       })
       .addCase(hydrateUserAction.rejected, (state) => {
-        state.isloading = true;
+        state.isloading = false;
       });
   },
 });

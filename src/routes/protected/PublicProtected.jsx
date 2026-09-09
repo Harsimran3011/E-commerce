@@ -1,8 +1,11 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router";
+import LoadingPage from "../../shared/ui/pages/LoadingPage";
 
 const PublicProtected = () => {
-  const { loggedInUser } = useSelector((store) => store.auth);
+  const { loggedInUser, isloading } = useSelector((store) => store.auth);
+
+  if (isloading) return <LoadingPage />;
 
   if (loggedInUser) {
     return <Navigate to={"/"} replace />;

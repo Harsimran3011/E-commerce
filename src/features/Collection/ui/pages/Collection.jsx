@@ -1,10 +1,29 @@
-import { SlidersHorizontal } from "lucide-react";
-import { NavLink, Outlet } from "react-router";
-import { useSelector } from "react-redux";
+import { Search } from "lucide-react";
+import { Outlet } from "react-router";
 import ProductGrid from "../components/ProductGrid";
+import CategoryFilter from "../components/CategoryFilter";
+import {
+  useAllProducts,
+  useAllCategories,
+  useProductByCategory,
+} from "../../hooks/productHook";
 
 const Collection = () => {
-  const { products } = useSelector((store) => store.product);
+  let { data: productList, isloading, search, setSearch } = useAllProducts();
+
+  console.log("Prdouct List", productList);
+
+  let { data: categories } = useAllCategories();
+
+  let {
+    data: filteredProduct,
+    categoryFilter,
+    setCategoryFilter,
+  } = useProductByCategory();
+
+  console.log("Filtered Products: ", filteredProduct);
+
+  if (isloading) return <h1>Loading Products...</h1>;
 
   return (
     <main className="min-h-screen bg-white text-[#222]">
@@ -30,79 +49,59 @@ const Collection = () => {
         </div>
       </section>
 
-      {/* ================= CATEGORY NAVIGATION ================= */}
-
-      <section className="border-b border-gray-100">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-8 overflow-x-auto px-5 py-7 text-[10px] uppercase tracking-[1.5px] whitespace-nowrap">
-          <NavLink
-            to="/collection"
-            className="border-b border-black pb-2 font-medium"
-          >
-            All
-          </NavLink>
-
-          <NavLink
-            to="/collection/men"
-            className="text-gray-400 transition hover:text-black"
-          >
-            Men
-          </NavLink>
-
-          <NavLink
-            to="/collection/women"
-            className="text-gray-400 transition hover:text-black"
-          >
-            Women
-          </NavLink>
-
-          <NavLink
-            to="/collection/accessories"
-            className="text-gray-400 transition hover:text-black"
-          >
-            Accessories
-          </NavLink>
-
-          <NavLink
-            to="/collection/footwear"
-            className="text-gray-400 transition hover:text-black"
-          >
-            Footwear
-          </NavLink>
-
-          <NavLink
-            to="/collection/new-arrivals"
-            className="text-gray-400 transition hover:text-black"
-          >
-            New Arrivals
-          </NavLink>
-        </div>
-      </section>
-
       {/* ================= PRODUCTS ================= */}
 
       <section className="mx-auto max-w-[1200px] px-5 py-16">
-        {/* Toolbar */}
+        {/* ================= PRODUCT TOOLBAR ================= */}
 
-        <div className="mb-10 flex items-center justify-between">
-          <p className="text-[10px] uppercase tracking-[1.5px] text-gray-400">
-            Showing {products[0].length} Products
-          </p>
+        <div className="mb-10 flex flex-col gap-5 border-b border-gray-100 pb-6 md:flex-row md:items-center md:justify-between">
+          {/* ================= SEARCH ================= */}
 
-          <button
-            type="button"
-            className="flex items-center gap-2 text-[10px] uppercase tracking-[1px] text-gray-500 transition hover:text-black"
-          >
-            <SlidersHorizontal size={14} strokeWidth={1.5} />
-            Filter & Sort
-          </button>
+          <div className="flex w-full items-center border-b border-gray-200 md:max-w-[320px]">
+            <Search
+              size={14}
+              strokeWidth={1.5}
+              className="shrink-0 text-gray-400"
+            />
+
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              type="text"
+              placeholder="Search products..."
+              className="w-full bg-transparent px-3 py-3 text-[11px] outline-none placeholder:text-gray-400"
+            />
+          </div>
+
+          {/* ================= FILTER ================= */}
+
+          <div className="flex items-center justify-between gap-5 md:justify-end">
+            {/* Product Count */}
+
+            <p className="text-[10px] uppercase tracking-[1.5px] text-gray-400">
+              {/* Showing {products?.[0]?.length || 0} Products */}
+            </p>
+
+            {/* Category Filter */}
+
+            <CategoryFilter
+              categories={categories}
+              categoryFilter={categoryFilter}
+              setCategoryFilter={setCategoryFilter}
+            />
+          </div>
         </div>
 
-        {/* Product Grid */}
+        {/* ================= PRODUCT GRID ================= */}
 
         <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
-          {products[0].map((product) => (
-            <ProductGrid key={product.id} product={product} />
-          ))}
+          {filteredProduct?.products.length
+            ? filteredProduct.products?.map((product) => (
+                <ProductGrid key={product.id} product={product} />
+              ))
+            : productList?.map((product) => (
+                <ProductGrid key={product.id} product={product} />
+              ))}
         </div>
       </section>
 
@@ -166,6 +165,9 @@ const Collection = () => {
           </button>
         </div>
       </section>
+
+      {/* ================= OUTLET ================= */}
+
       <Outlet />
     </main>
   );
