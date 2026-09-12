@@ -1,15 +1,23 @@
 import { api } from "../../../config/api";
 
-export const getAllProductsApi = async (search) => {
+export const getAllProductsApi = async (
+  skip = 0,
+  search = null,
+  limit = 10,
+) => {
   try {
-    let url = search ? `/products/search?q=${search}` : `/products`;
-    let res = await api.get(url);
-    return res.data.products;
+    const url = search
+      ? `/products/search?q=${search}&limit=${limit}&skip=${skip}`
+      : `/products?limit=${limit}&skip=${skip}`;
+
+    const res = await api.get(url);
+
+    return res.data;
   } catch (error) {
-    console.log("Products Api error: ", error);
+    console.log("Product API Error:", error);
+    throw error;
   }
 };
-
 export const getAllCategories = async () => {
   try {
     let res = await api.get("/products/categories");

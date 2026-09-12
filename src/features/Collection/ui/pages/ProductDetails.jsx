@@ -1,24 +1,39 @@
 import { ArrowLeft, Heart, Minus, Plus, ShoppingBag, Star } from "lucide-react";
 import { useDetailedProduct } from "../../hooks/productHook";
+import LoadingProducts from "../components/LoadingProducts";
+import LoadingImage from "../components/LoadingImage";
+import { useEffect } from "react";
 
 const ProductDetails = () => {
-  const { data } = useDetailedProduct();
+  const {
+    data: product,
+    navigate,
+    imageLoaded,
+    setImageLoaded,
+  } = useDetailedProduct();
 
-  const product = data;
-  console.log("product ===> ", product);
+  useEffect(() => {
+    if (product?.id) {
+      setImageLoaded(false);
+    }
+  }, [product?.id]);
 
-  if (!product) {
-    return (
-      <main className="min-h-screen bg-white text-[#222]">
-        <section className="mx-auto max-w-[1200px] px-5 py-20 text-center">
-          <h1 className="text-2xl font-medium">Product not found</h1>
-        </section>
-      </main>
-    );
-  }
+  if (!product) return <LoadingProducts />;
 
   return (
     <main className="min-h-screen bg-white text-[#222]">
+      {/* ================= BACK TO COLLECTION ================= */}
+      <section className="border-t border-gray-100">
+        <div className="mx-auto max-w-[1200px] px-5 py-8">
+          <div className="flex items-center gap-2 text-[10px] cursor-pointer uppercase tracking-[1.5px] text-gray-400">
+            <ArrowLeft size={13} strokeWidth={1.5} />
+            <p onClick={() => navigate("/collection")} className="text-[10px]">
+              Back to Collection
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ================= BREADCRUMB ================= */}
       <section className="border-b border-gray-100">
         <div className="mx-auto max-w-[1200px] px-5 py-5">
@@ -36,10 +51,16 @@ const ProductDetails = () => {
           {/* ================= PRODUCT IMAGE ================= */}
           <div className="relative">
             <div className="aspect-[4/5] overflow-hidden bg-[#f5f5f5]">
+              {!imageLoaded && <LoadingImage />}
+
               <img
                 src={product.images?.[0]}
                 alt={product.title}
-                className="h-full w-full object-cover"
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageLoaded(true)}
+                className={`h-full w-full object-cover transition-opacity duration-500 ${
+                  imageLoaded ? "opacity-100" : "opacity-0"
+                }`}
               />
             </div>
 
@@ -236,16 +257,6 @@ const ProductDetails = () => {
 
               <p className="mt-2 text-[11px]">{product.stock} units</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= BACK TO COLLECTION ================= */}
-      <section className="border-t border-gray-100">
-        <div className="mx-auto max-w-[1200px] px-5 py-8">
-          <div className="flex items-center gap-2 text-[10px] uppercase tracking-[1.5px] text-gray-400">
-            <ArrowLeft size={13} strokeWidth={1.5} />
-            Back to Collection
           </div>
         </div>
       </section>

@@ -1,4 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from "@tanstack/react-query";
 import {
   getAllCategories,
   getAllProductsApi,
@@ -6,30 +10,56 @@ import {
   getProductByCategories,
 } from "../api/productApi";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export const useAllProducts = () => {
-  const [search, setSearch] = useState(null);
-  const [debounce, setDebounce] = useState(null);
+  const [search, setSearch] = useState("");
+  const [debounceSearch, setDebounceSearch] = useState(null);
+
+  const limit = 50;
 
   useEffect(() => {
-    let timeout = setTimeout(() => {
-      setDebounce(search);
+    const timeout = setTimeout(() => {
+      setDebounceSearch(search);
     }, 700);
 
     return () => clearTimeout(timeout);
   }, [search]);
 
-  let { data, isLoading, error } = useQuery({
-    queryKey: ["allProducts", debounce],
-    queryFn: () => getAllProductsApi(debounce),
-    staleTime: 4000,
+  const {
+    data,
+    isPending,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["allProducts", debounceSearch],
+
+    queryFn: ({ pageParam }) =>
+      getAllProductsApi(pageParam, debounceSearch, limit),
+
+    initialPageParam: 0,
+    placeholderData: keepPreviousData,
+
+    getNextPageParam: (lastPage, allPages) => {
+      const loadedProducts = allPages.length * limit;
+
+      if (loadedProducts >= lastPage.total) {
+        return undefined;
+      }
+
+      return loadedProducts;
+    },
   });
 
   return {
     data,
-    isLoading,
+    isPending,
     error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
     search,
     setSearch,
   };
@@ -45,32 +75,29 @@ export const useAllCategories = () => {
 export const useProductByCategory = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
 
-  console.log("catefilter = ", categoryFilter);
-
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["productCategory", categoryFilter],
     queryFn: () => getProductByCategories(categoryFilter),
     enabled: categoryFilter !== "all",
   });
 
-  console.log("data ===> ", data);
-
   return {
     data,
     categoryFilter,
     setCategoryFilter,
+    isFetching,
   };
 };
 
 export const useDetailedProduct = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   let { data } = useQuery({
     queryKey: ["detailedProduct"],
     queryFn: () => getDetailedProduct(id),
   });
 
-  console.log("details ===> ", data);
-
-  return { data };
+  return { data, navigate, imageLoaded, setImageLoaded };
 };

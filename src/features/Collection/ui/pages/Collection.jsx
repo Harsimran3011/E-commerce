@@ -7,11 +7,18 @@ import {
   useAllCategories,
   useProductByCategory,
 } from "../../hooks/productHook";
+import LoadingProducts from "../components/LoadingProducts";
 
 const Collection = () => {
-  let { data: productList, isloading, search, setSearch } = useAllProducts();
-
-  console.log("Prdouct List", productList);
+  let {
+    data: productList,
+    isPending: pendingProducts,
+    search,
+    setSearch,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useAllProducts();
 
   let { data: categories } = useAllCategories();
 
@@ -19,11 +26,12 @@ const Collection = () => {
     data: filteredProduct,
     categoryFilter,
     setCategoryFilter,
+    isFetching: isFetchingFilterProducts,
   } = useProductByCategory();
 
-  console.log("Filtered Products: ", filteredProduct);
+  if (pendingProducts) return <LoadingProducts />;
 
-  if (isloading) return <h1>Loading Products...</h1>;
+  const products = productList?.pages?.flatMap((page) => page.products) ?? [];
 
   return (
     <main className="min-h-screen bg-white text-[#222]">
@@ -94,15 +102,28 @@ const Collection = () => {
 
         {/* ================= PRODUCT GRID ================= */}
 
-        <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
-          {filteredProduct?.products.length
-            ? filteredProduct.products?.map((product) => (
-                <ProductGrid key={product.id} product={product} />
-              ))
-            : productList?.map((product) => (
-                <ProductGrid key={product.id} product={product} />
-              ))}
-        </div>
+        {!isFetchingFilterProducts ? (
+          <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+            {filteredProduct?.products?.length
+              ? filteredProduct?.products?.map((product) => (
+                  <ProductGrid key={product.id} product={product} />
+                ))
+              : products?.map((product) => (
+                  <ProductGrid key={product.id} product={product} />
+                ))}
+          </div>
+        ) : (
+          <LoadingProducts />
+        )}
+
+        <button
+          type="button"
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage || filteredProduct}
+          className="mx-auto mt-12 flex w-full cursor-pointer items-center justify-center border border-gray-200 bg-white px-8 py-3 text-[10px] font-medium uppercase tracking-[1.5px] text-gray-600 transition-all duration-300 hover:border-black hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {isFetchingNextPage ? "Loading..." : "Load More"}
+        </button>
       </section>
 
       {/* ================= PROMOTIONAL BANNER ================= */}

@@ -7,7 +7,9 @@ const MainLayout = () => (
   <div>
     <Navbar />
     <ScrollToTop />
-    <Outlet />
+    <main className="pt-15">
+      <Outlet />
+    </main>
     <Footer />
   </div>
 );
