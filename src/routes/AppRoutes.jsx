@@ -7,6 +7,9 @@ import MainProtected from "./protected/MainProtected";
 import PublicProtected from "./protected/PublicProtected";
 import NotFound from "../shared/ui/pages/NotFound";
 import { hydrateUserAction } from "../features/auth/state/authAction";
+import Cart from "../features/cart/ui/pages/Cart";
+import Checkout from "../features/checkout/ui/pages/Checkout";
+import OrderSuccess from "../features/checkout/ui/pages/OrderSuccess";
 
 const HomePage = lazy(() => import("../shared/ui/pages/HomePage"));
 const Blog = lazy(() => import("../shared/ui/pages/Blog"));
@@ -111,6 +114,18 @@ const AppRoutes = () => {
             {
               path: "about",
               element: <AboutPage />,
+            },
+            {
+              path: "cart",
+              element: <Cart />,
+            },
+            {
+              path: "checkout",
+              element: <Checkout />,
+            },
+            {
+              path: "order-success",
+              element: <OrderSuccess />,
             },
           ],
         },

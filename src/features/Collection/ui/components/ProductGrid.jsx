@@ -1,8 +1,9 @@
 import { Heart, ShoppingBag } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useCart } from "../../../cart/hooks/useCart";
 
 const ProductGrid = ({ product }) => {
-  const navigate = useNavigate();
+  const { navigate, setIsAddToCart } = useCart();
+
 
   return (
     <article
@@ -25,16 +26,6 @@ const ProductGrid = ({ product }) => {
           className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center bg-white opacity-0 shadow-sm transition duration-300 group-hover:opacity-100"
         >
           <Heart size={15} strokeWidth={1.5} />
-        </button>
-
-        {/* Add To Cart */}
-
-        <button
-          type="button"
-          className="absolute bottom-0 left-0 flex w-full translate-y-full items-center justify-center gap-2 bg-black py-3 text-[9px] font-medium tracking-[1px] text-white transition duration-300 group-hover:translate-y-0"
-        >
-          <ShoppingBag size={13} strokeWidth={1.5} />
-          ADD TO CART
         </button>
       </div>
 

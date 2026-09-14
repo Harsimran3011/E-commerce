@@ -3,11 +3,14 @@ import { Heart, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
 
 import { NavLink } from "react-router";
 import { useAuth } from "../../../features/auth/hooks/useAuth";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { removeLoggedInUser } = useAuth();
+  const { removeLoggedInUser, navigate } = useAuth();
+
+  const { cartItems } = useSelector((state) => state.cart);
 
   const handleMenuToggle = () => {
     setIsMenuOpen((prev) => !prev);
@@ -128,14 +131,15 @@ const Navbar = () => {
           {/* Shopping Bag */}
 
           <button
+            onClick={() => navigate("/cart")}
             type="button"
-            className="relative transition-colors hover:text-black"
+            className="relative transition-colors cursor-pointer hover:text-black"
             aria-label="Shopping bag"
           >
             <ShoppingBag size={19} strokeWidth={1.5} />
 
             <span className="absolute -right-3 -top-3 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[8px] text-white">
-              02
+              {cartItems.length}
             </span>
           </button>
 

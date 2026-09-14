@@ -1,11 +1,6 @@
-import { useEffect } from "react";
-import AppRoutes from "./routes/Approutes";
+import AppRoutes from "./routes/AppRoutes";
 
 const App = () => {
-  useEffect(() => {
-    console.log("app");
-  }, []);
-
   return (
     <div>
       <AppRoutes />

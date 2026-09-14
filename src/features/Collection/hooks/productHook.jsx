@@ -14,14 +14,14 @@ import { useNavigate, useParams } from "react-router";
 
 export const useAllProducts = () => {
   const [search, setSearch] = useState("");
-  const [debounceSearch, setDebounceSearch] = useState(null);
+  const [debounceSearch, setDebounceSearch] = useState("");
 
-  const limit = 50;
+  const limit = 10;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebounceSearch(search);
-    }, 700);
+    }, 400);
 
     return () => clearTimeout(timeout);
   }, [search]);
@@ -40,7 +40,7 @@ export const useAllProducts = () => {
       getAllProductsApi(pageParam, debounceSearch, limit),
 
     initialPageParam: 0,
-    placeholderData: keepPreviousData,
+    keepPreviousData: true,
 
     getNextPageParam: (lastPage, allPages) => {
       const loadedProducts = allPages.length * limit;
@@ -95,8 +95,9 @@ export const useDetailedProduct = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   let { data } = useQuery({
-    queryKey: ["detailedProduct"],
+    queryKey: ["detailedProduct", id],
     queryFn: () => getDetailedProduct(id),
+    enabled: !!id,
   });
 
   return { data, navigate, imageLoaded, setImageLoaded };

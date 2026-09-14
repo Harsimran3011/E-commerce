@@ -1,12 +1,15 @@
 import { Search } from "lucide-react";
 import { Outlet } from "react-router";
+
 import ProductGrid from "../components/ProductGrid";
 import CategoryFilter from "../components/CategoryFilter";
+
 import {
   useAllProducts,
   useAllCategories,
   useProductByCategory,
 } from "../../hooks/productHook";
+
 import LoadingProducts from "../components/LoadingProducts";
 
 const Collection = () => {
@@ -29,14 +32,13 @@ const Collection = () => {
     isFetching: isFetchingFilterProducts,
   } = useProductByCategory();
 
-  if (pendingProducts) return <LoadingProducts />;
+  // if (pendingProducts) return <LoadingProducts />;
 
   const products = productList?.pages?.flatMap((page) => page.products) ?? [];
 
   return (
     <main className="min-h-screen bg-white text-[#222]">
       {/* ================= HERO ================= */}
-
       <section className="bg-[#f4f2ed]">
         <div className="mx-auto max-w-[1200px] px-5 py-20 text-center md:py-24">
           <p className="text-[10px] font-medium uppercase tracking-[4px] text-gray-400">
@@ -58,13 +60,10 @@ const Collection = () => {
       </section>
 
       {/* ================= PRODUCTS ================= */}
-
-      <section className="mx-auto max-w-[1200px] px-5 py-16">
+      <section className="mx-auto max-w-[1200px] px-4 py-16 sm:px-5">
         {/* ================= PRODUCT TOOLBAR ================= */}
-
         <div className="mb-10 flex flex-col gap-5 border-b border-gray-100 pb-6 md:flex-row md:items-center md:justify-between">
           {/* ================= SEARCH ================= */}
-
           <div className="flex w-full items-center border-b border-gray-200 md:max-w-[320px]">
             <Search
               size={14}
@@ -82,16 +81,13 @@ const Collection = () => {
           </div>
 
           {/* ================= FILTER ================= */}
-
           <div className="flex items-center justify-between gap-5 md:justify-end">
             {/* Product Count */}
-
             <p className="text-[10px] uppercase tracking-[1.5px] text-gray-400">
               {/* Showing {products?.[0]?.length || 0} Products */}
             </p>
 
             {/* Category Filter */}
-
             <CategoryFilter
               categories={categories}
               categoryFilter={categoryFilter}
@@ -101,21 +97,23 @@ const Collection = () => {
         </div>
 
         {/* ================= PRODUCT GRID ================= */}
-
-        {!isFetchingFilterProducts ? (
-          <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
-            {filteredProduct?.products?.length
-              ? filteredProduct?.products?.map((product) => (
+        {pendingProducts ? (
+          <LoadingProducts />
+        ) : isFetchingFilterProducts && categoryFilter !== "all" ? (
+          <LoadingProducts />
+        ) : (
+          <div className="grid grid-cols-1 gap-y-10 min-[421px]:grid-cols-2 min-[421px]:gap-x-4 min-[421px]:gap-y-10 md:grid-cols-3 md:gap-x-5 md:gap-y-12 lg:grid-cols-4">
+            {categoryFilter === "all"
+              ? products?.map((product) => (
                   <ProductGrid key={product.id} product={product} />
                 ))
-              : products?.map((product) => (
+              : filteredProduct?.products?.map((product) => (
                   <ProductGrid key={product.id} product={product} />
                 ))}
           </div>
-        ) : (
-          <LoadingProducts />
         )}
 
+        {/* ================= LOAD MORE ================= */}
         <button
           type="button"
           onClick={() => fetchNextPage()}
@@ -127,7 +125,6 @@ const Collection = () => {
       </section>
 
       {/* ================= PROMOTIONAL BANNER ================= */}
-
       <section className="bg-[#f5f3ef]">
         <div className="mx-auto grid max-w-[1200px] items-center md:grid-cols-2">
           <div className="px-8 py-16 md:px-14">
@@ -158,7 +155,6 @@ const Collection = () => {
       </section>
 
       {/* ================= NEWSLETTER ================= */}
-
       <section className="mx-auto max-w-[700px] px-5 py-20 text-center">
         <p className="text-[10px] uppercase tracking-[4px] text-gray-400">
           Stay Updated
@@ -188,7 +184,6 @@ const Collection = () => {
       </section>
 
       {/* ================= OUTLET ================= */}
-
       <Outlet />
     </main>
   );

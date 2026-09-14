@@ -1,8 +1,10 @@
 import { ArrowLeft, Heart, Minus, Plus, ShoppingBag, Star } from "lucide-react";
 import { useDetailedProduct } from "../../hooks/productHook";
-import LoadingProducts from "../components/LoadingProducts";
 import LoadingImage from "../components/LoadingImage";
 import { useEffect } from "react";
+import { useCart } from "../../../cart/hooks/useCart";
+import ProductDetailSkeleton from "../components/ProductDetailSkeleton";
+import { useSelector } from "react-redux";
 
 const ProductDetails = () => {
   const {
@@ -12,13 +14,19 @@ const ProductDetails = () => {
     setImageLoaded,
   } = useDetailedProduct();
 
+  const { addCartItem, dispatch } = useCart();
+
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
+  const cartProduct = cartItems.find((item) => item.id === product?.id);
+
   useEffect(() => {
     if (product?.id) {
       setImageLoaded(false);
     }
   }, [product?.id]);
 
-  if (!product) return <LoadingProducts />;
+  if (!product) return <ProductDetailSkeleton />;
 
   return (
     <main className="min-h-screen bg-white text-[#222]">
@@ -166,11 +174,32 @@ const ProductDetails = () => {
 
             {/* Add To Cart */}
             <button
+              onClick={() => {
+                addCartItem(product);
+              }}
+              disabled={cartProduct?.isAdded}
               type="button"
-              className="mt-8 flex h-12 w-full items-center justify-center gap-3 bg-black text-[10px] font-medium tracking-[1.5px] text-white transition hover:bg-gray-800 sm:w-[300px]"
+              className={`group mt-8 flex h-12 w-full items-center justify-center gap-3 border px-8 text-[10px] font-medium uppercase tracking-[2px] transition-all duration-300 sm:w-[300px] ${
+                cartProduct?.isAdded
+                  ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400"
+                  : "cursor-pointer border-black bg-black text-white hover:bg-white hover:text-black"
+              }`}
             >
-              <ShoppingBag size={15} strokeWidth={1.5} />
-              ADD TO CART
+              {cartProduct?.isAdded ? (
+                <>
+                  <span className="text-[13px]">✓</span>
+                  <span>Added to Cart</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingBag
+                    size={15}
+                    strokeWidth={1.5}
+                    className="transition-transform duration-300 group-hover:-translate-y-0.5"
+                  />
+                  <span>Add to Cart</span>
+                </>
+              )}
             </button>
 
             {/* Shipping */}
