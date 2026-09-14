@@ -1,185 +1,262 @@
-# 🛍️ Flone — Modern E-Commerce Web Application
+# Flone — Modern E-Commerce Website
 
-Flone is a modern and responsive e-commerce web application built with React.js.  
-The project focuses on a clean shopping experience, reusable components, dynamic product pages, authentication, centralized state management, API integration, and scalable frontend architecture.
+Flone is a modern, responsive and minimal e-commerce website built with React and a component-based architecture.
+
+The project focuses on creating a clean and premium shopping experience with reusable UI components, API integration, product pagination, search, category filtering and centralized cart state management.
+
+---
+
+## 🚀 Project Status
+
+**Current Status:** Checkout UI Development 🚧
+
+### Completed
+
+- Home Page
+- Navbar
+- Hero Sections
+- Collection Page
+- Product Grid
+- Product Search
+- Category Filtering
+- Product Details Page
+- Pagination
+- Loading Skeletons
+- Cart Feature
+- Cart UI
+- Cart State Management
+- Responsive Design
+
+### In Progress
+
+- Checkout Page UI
+- Order Success Page UI
+- Checkout Functionality
+- Order Processing
 
 ---
 
 ## ✨ Features
 
 ### 🏠 Home Page
-- Modern e-commerce landing page
-- Hero section
-- Featured products
+
+- Modern hero section
 - Promotional sections
-- Responsive design
-- Navigation to different sections of the application
-
-### 🛍️ Collection
-- Dynamic product listing
-- Responsive product grid
-- Product image, category, title and price
-- Product cards with hover interactions
-- Wishlist UI
-- Add to Cart UI
-- Dynamic product routing
-
-### 📦 Product Details
-- Dynamic product details page
-- Product image
-- Product title
-- Brand
-- Category
-- Price
-- Discount
-- Rating
-- Availability
-- Stock information
-- Product description
-- Shipping information
-- Warranty information
-- Return policy
-- SKU
-- Minimum order quantity
-- Add to Cart UI
-- Quantity selector UI
-
-### 🔐 Authentication
-- Login
-- Register
-- Authentication state management
-- User hydration
-- Protected routes
-- Public routes
-
-### 🧭 Routing
-- React Router based navigation
-- Nested routes
-- Dynamic product routes
-- Protected routes
-- Public authentication routes
-- Separate layouts for authentication and main application
-
-### ⚡ Performance
-- Lazy loading using React `lazy()`
-- `Suspense` based loading states
-- Component-based architecture
-- Centralized Redux state management
-
-### 📱 Responsive UI
-The application is designed to work across:
-
-- Desktop
-- Laptop
-- Tablet
-- Mobile
+- Featured products
+- New collection sections
+- Service highlights
+- Newsletter section
+- Responsive layout
 
 ---
 
-# 🛠️ Tech Stack
+### 🛍️ Collection
+
+- Product listing
+- Product search
+- Debounced search
+- Category filtering
+- Pagination
+- Product loading skeleton
+- Responsive product grid
+- Product discount badges
+- Product ratings
+- Product navigation
+
+---
+
+### 📦 Product Details
+
+- Product image
+- Product title
+- Category
+- Price
+- Discount percentage
+- Product rating
+- Product description
+- Stock information
+- Quantity controls
+- Add to Cart UI
+- Product information
+- Shipping information
+- Warranty information
+- Return policy
+
+---
+
+### 🛒 Cart
+
+The cart feature is completed.
+
+Features include:
+
+- Product listing
+- Product image
+- Product information
+- Product price
+- Quantity management
+- Increment quantity
+- Decrement quantity
+- Remove cart item
+- Clear cart
+- Subtotal
+- Shipping information
+- Tax calculation UI
+- Total amount
+- Order summary
+- Proceed to Checkout
+
+Cart state is managed using Redux Toolkit.
+
+---
+
+### 💳 Checkout
+
+The Checkout section is currently under development.
+
+Current UI includes:
+
+- Checkout Header
+- Delivery Information
+- Customer Information
+- Delivery Address
+- Delivery Method
+- Standard Delivery
+- Express Delivery
+- Payment Method
+- Cash on Delivery
+- UPI
+- Credit / Debit Card
+- Order Notes
+- Order Items
+- Order Summary
+- Price Breakdown
+- Secure Checkout
+- Checkout Footer
+
+---
+
+### ✅ Order Success
+
+Order Success UI is also prepared.
+
+Current UI includes:
+
+- Order confirmation
+- Order ID
+- Order status
+- Estimated delivery
+- Payment status
+- Order summary
+- Purchased products
+- Total amount
+- Continue Shopping
+- Back to Home
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
 
-- React.js
+- React
 - JavaScript
-- JSX
 - Tailwind CSS
+- React Router
 - Lucide React
 
 ### State Management
 
-- Redux
-- React Redux
+- Redux Toolkit
+- Redux Thunk
 
-### Routing
+### Data Fetching
 
-- React Router
-
-### API & Data
-
+- TanStack Query
 - Axios
-- REST API
-- DummyJSON Product API
 
-### Development Tools
+### API
+
+- DummyJSON API
+
+### Development
 
 - Vite
-- ESLint
-- Prettier
 - Git
 - GitHub
-- VS Code
 
 ---
 
-# 🏗️ Project Architecture
+## 🔧 Core Technologies
 
-The project follows a feature-based and modular architecture to keep the application scalable and maintainable.
+### React
 
-```text
-src/
+Used for building the component-based user interface and application structure.
+
+### React Router
+
+Used for client-side routing and navigation between pages.
+
+### Redux Toolkit
+
+Used for centralized application state management, especially cart-related state.
+
+### Redux Thunk
+
+Used for handling asynchronous Redux actions.
+
+### TanStack Query
+
+Used for server-state management, API requests, caching and fetching states.
+
+### Axios
+
+Used for communicating with the product API.
+
+### Tailwind CSS
+
+Used for responsive styling and UI development.
+
+### Lucide React
+
+Used for modern and lightweight interface icons.
+
+---
+
+## 🌐 API
+
+The project currently uses the DummyJSON API for product data.
+
+### Product API Features
+
+- Fetch all products
+- Fetch single product
+- Search products
+- Fetch product categories
+- Fetch products by category
+- Pagination
+
+---
+
+## 📄 Pages
+
+├── Home
 │
-├── app/
-│   └── layout/
-│       ├── AuthLayout.jsx
-│       └── MainLayout.jsx
+├── Collection
+│   └── Product Details
 │
-├── config/
-│   └── api.js
+├── Cart
 │
-├── features/
-│   │
-│   ├── auth/
-│   │   ├── api/
-│   │   │   └── authApi.js
-│   │   │
-│   │   ├── state/
-│   │   │   └── authSlice.js
-│   │   │
-│   │   └── ui/
-│   │       ├── LoginPage.jsx
-│   │       └── RegisterPage.jsx
-│   │
-│   └── Collection/
-│       ├── api/
-│       │   └── productApi.js
-│       │
-│       ├── hooks/
-│       │   └── productHook.js
-│       │
-│       ├── state/
-│       │   └── productSlice.js
-│       │
-│       └── ui/
-│           ├── components/
-│           │   └── ProductGrid.jsx
-│           │
-│           └── pages/
-│               ├── Collection.jsx
-│               └── ProductDetails.jsx
+├── Checkout
 │
-├── routes/
-│   ├── AppRoutes.jsx
-│   │
-│   └── protected/
-│       ├── MainProtected.jsx
-│       └── PublicProtected.jsx
+├── Order Success
 │
-├── shared/
-│   ├── api/
-│   ├── hooks/
-│   ├── state/
-│   │
-│   └── ui/
-│       ├── components/
-│       │
-│       └── pages/
-│           ├── HomePage.jsx
-│           ├── AboutPage.jsx
-│           ├── Blog.jsx
-│           ├── ContactPage.jsx
-│           └── LoadingPage.jsx
+├── About
 │
-├── App.jsx
-├── main.jsx
-└── index.css
+├── Blog
+│
+├── Contact
+│
+└── Authentication
+    ├── Login
+    └── Register
